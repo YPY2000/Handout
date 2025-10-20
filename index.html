@@ -1,22 +1,22 @@
 <!DOCTYPE html>
-<html lang="de" class="scroll-smooth">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OXID Mission, Strategie & Ziele 2025</title>
+    <title>OXID Strategie Dashboard 2025</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Chosen Palette: Warm Neutral Stone with Emerald Accent -->
-    <!-- Application Structure Plan: Die Anwendung ist als interaktives Dashboard mit vier Hauptabschnitten konzipiert: "Markt & Modell", "Mission", "Strategie" und "Ziele 2025". Diese thematische Struktur bricht mit dem linearen Format des Berichts, um eine explorative User Journey zu ermöglichen. Der Nutzer startet mit dem grundlegenden "Warum" (Markt), geht über zum "Was" (Mission), zum "Wie" (Strategie) und schliesslich zur "Messung" (Ziele). Interaktive Elemente wie klickbare Diagramme, aufklappbare Karten und ein KPI-Dashboard fördern das Engagement und helfen, komplexe Informationen in verdaulichen Häppchen zu präsentieren. Diese Architektur wurde gewählt, um die strategischen Zusammenhänge intuitiv begreifbar zu machen und die Kernaussagen visuell zu untermauern, was die Usability gegenüber einem reinen Textdokument massiv erhöht. -->
-    <!-- Visualization & Content Choices: 1. Markt & Modell -> Ziel: Fundament erklären -> Methode: HTML/CSS-Flussdiagramm -> Interaktion: Hover-Effekte -> Begründung: Visualisiert den Kernprozess von Markt zu Lösung auf einfache Weise. 2. Mission -> Ziel: Kernaussage emotional verankern -> Methode: Interaktiver Textblock -> Interaktion: Klick auf Satzteile zeigt Erklärungen -> Begründung: Verbindet die Mission direkt mit ihrer Bedeutung. 3. Strategie -> Ziel: Die vier Säulen der Strategie darstellen -> Methode: Interaktive Karten in einem Grid -> Interaktion: Klick zum Aufklappen von Details -> Begründung: Strukturiert die komplexe Strategie übersichtlich. 4. Ziele 2025 -> Ziel: Quantitative Ziele messbar machen -> Methode: Chart.js Balkendiagramm & KPI-Karten-Grid -> Interaktion: Chart-Tooltips, Klick auf Karten für Details -> Begründung: Bietet einen schnellen visuellen Überblick (Dashboard-Charakter) und erlaubt gleichzeitig den Drill-Down in spezifische Ziele. Alle Visualisierungen nutzen Canvas oder HTML/CSS, um die Anforderungen zu erfüllen. -->
+    <!-- Application Structure Plan: Die Anwendung wurde in ein Tab-basiertes Interface umgestaltet, um die Navigation zu verbessern und die Informationsüberflutung zu reduzieren. Statt einer langen Scroll-Seite gibt es nun diskrete Sektionen (Übersicht, Markt & Modell, Strategische Modelle, Mission & Strategie, Ziele 2025), die per Klick auf die Navigationsleiste ein- und ausgeblendet werden. Dies fördert eine fokussierte Auseinandersetzung mit jedem strategischen Baustein. Die "Übersicht" dient als neuer Einstiegspunkt mit den wichtigsten Informationen auf einen Blick. -->
+    <!-- Visualization & Content Choices: Die Visualisierungen und Interaktionen der vorherigen Version wurden beibehalten, aber in die neue Tab-Struktur integriert. 1. Übersicht (Neu): Zeigt die Kernaussage (Mission) und das Haupt-KPI-Chart, um einen schnellen Einstieg zu ermöglichen. 2. Markt & Modell: Enthält die Herleitung und das Diagramm zur "Branchen-Partner-Prozess-Segment-Lösung". 3. Strategische Modelle: Die interaktiven Diagramme zum Ökosystem und Fokus. 4. Mission & Strategie: Kombiniert die interaktive Mission mit den aufklappbaren Strategie-Karten für einen direkten Zusammenhang. 5. Ziele: Fokussiert sich rein auf die detaillierten, aufklappbaren KPI-Karten. -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #fafaf9; /* stone-50 */
+            background-color: #f5f5f4; /* stone-100 */
             color: #1c1917; /* stone-900 */
         }
         .chart-container {
@@ -28,354 +28,268 @@
             height: 300px;
             max-height: 400px;
         }
-        @media (min-width: 768px) {
-            .chart-container {
-                height: 400px;
-            }
-        }
-        .mission-segment {
+        @media (min-width: 768px) { .chart-container { height: 400px; } }
+        .nav-link {
             cursor: pointer;
-            transition: all 0.2s ease-in-out;
-            border-bottom: 2px solid transparent;
+            padding: 1rem 0;
+            border-bottom: 3px solid transparent;
+            transition: color 0.2s ease-in-out, border-color 0.2s ease-in-out;
         }
-        .mission-segment:hover {
-            color: #059669; /* emerald-600 */
-        }
-        .mission-segment.active {
-            color: #059669; /* emerald-600 */
-            border-bottom: 2px solid #059669;
-        }
-        .kpi-card {
-            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-        }
-        .kpi-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-        }
+        .nav-link:hover { color: #059669; }
+        .nav-link.active { color: #059669; border-color: #059669; font-weight: 600; }
+        .kpi-card { transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; }
+        .kpi-card:hover { transform: translateY(-4px); box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1); }
+        .eco-level { transition: background-color 0.3s, box-shadow 0.3s; cursor: pointer; }
+        .eco-level.highlight { background-color: #d1fae5; box-shadow: 0 0 0 3px #10b981; }
     </style>
 </head>
 <body class="antialiased">
 
-    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
-        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <h1 class="text-xl md:text-2xl font-bold text-stone-800">
-                OXID Strategie-Kompass
-            </h1>
-            <div class="hidden md:flex space-x-8">
-                <a href="#markt" class="text-stone-600 hover:text-emerald-600 transition-colors">Markt & Modell</a>
-                <a href="#mission" class="text-stone-600 hover:text-emerald-600 transition-colors">Mission</a>
-                <a href="#strategie" class="text-stone-600 hover:text-emerald-600 transition-colors">Strategie</a>
-                <a href="#ziele" class="text-stone-600 hover:text-emerald-600 transition-colors">Ziele 2025</a>
+    <header class="bg-white shadow-md">
+        <div class="container mx-auto px-6">
+            <div class="flex justify-between items-center py-4">
+                 <h1 class="text-xl md:text-2xl font-bold text-stone-800">OXID Strategie Dashboard</h1>
             </div>
-        </nav>
+            <nav id="main-nav" class="flex space-x-6 md:space-x-8 border-b border-stone-200">
+                <a class="nav-link active" data-target="overview">Übersicht</a>
+                <a class="nav-link" data-target="markt">Markt & Modell</a>
+                <a class="nav-link" data-target="modelle">Strategische Modelle</a>
+                <a class="nav-link" data-target="strategie">Mission & Strategie</a>
+                <a class="nav-link" data-target="ziele">Ziele 2025</a>
+            </nav>
+        </div>
     </header>
 
-    <main class="container mx-auto px-6 py-12 md:py-16">
+    <main class="container mx-auto px-6 py-12">
 
-        <section id="markt" class="mb-20 md:mb-28 text-center scroll-mt-20">
-            <h2 class="text-3xl md:text-4xl font-bold mb-4">Marktanalyse & Geschäftsmodell</h2>
-            <p class="max-w-3xl mx-auto text-stone-600 mb-12">Die OXID-Strategie basiert auf einem tiefen Verständnis des Mittelstands. Unser Produkt, die OXID Plattform, und unser Partnermodell sind die Antwort auf die spezifischen Herausforderungen dieses Marktes, was in der "Branchen-Prozess-Segment-Lösung" mündet.</p>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
-                <div class="bg-white p-6 rounded-lg shadow-md">
-                    <h3 class="text-xl font-semibold mb-3 text-emerald-700">Zielmarkt: Der Mittelstand</h3>
-                    <p class="text-stone-600">Vertriebsprozesse sind oft zu komplex für Standard-Shops, aber die Ressourcen für teure Individualentwicklungen fehlen. Hier sehen wir unsere Chance.</p>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow-md">
-                    <h3 class="text-xl font-semibold mb-3 text-emerald-700">Produkt: Die OXID Plattform</h3>
-                    <p class="text-stone-600">Ein flexibles, erweiterbares Fundament, das Partnern ermöglicht, beliebige komplexe Prozesse hocheffizient und kostengünstig abzubilden.</p>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow-md">
-                    <h3 class="text-xl font-semibold mb-3 text-emerald-700">Geschäftsmodell: Das Partnermodell</h3>
-                    <p class="text-stone-600">Unsere Partner bringen spezifische Branchen- und Prozesskompetenz ein, um auf Basis der Plattform passgenaue Kundenlösungen zu entwickeln.</p>
-                </div>
+        <!-- Overview Section -->
+        <section id="overview" class="content-section">
+            <div class="max-w-3xl mx-auto bg-white p-8 rounded-lg shadow-md border-l-4 border-emerald-500 mb-12">
+                 <p class="text-sm text-stone-500 mb-2">Führungsteam | 23. August 2025</p>
+                <p class="text-stone-600 italic leading-relaxed">"Dieses interaktive Dashboard soll dabei helfen, die Herleitung unserer Mission aus den Marktgegebenheiten zu visualisieren und die daraus abgeleitete Strategie sowie die konkreten Ziele verständlich zu machen."</p>
             </div>
 
-            <div class="mt-12">
-                 <h3 class="text-2xl font-bold mb-6">Der Kern: Branchen-Prozess-Segment-Lösungen</h3>
-                 <div class="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-4">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                <div class="bg-white p-8 rounded-lg shadow-lg">
+                    <h2 class="text-2xl font-bold text-center mb-4">Unsere Mission</h2>
+                    <p class="text-center text-xl font-light leading-relaxed text-stone-700">
+                        Unsere Kunden spielen in der 1. Liga im digitalen Verkauf,
+                        weil unsere Partner und wir gemeinsam tolle eCommerce-Lösungen für den Mittelstand schaffen
+                        auf Basis der OXID Plattform.
+                    </p>
+                </div>
+                <div class="bg-white p-8 rounded-lg shadow-lg">
+                    <h2 class="text-2xl font-bold text-center mb-4">Wachstums- & Stabilitätsziele</h2>
+                    <div class="chart-container"><canvas id="zieleChartOverview"></canvas></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Markt & Modell Section -->
+        <section id="markt" class="content-section hidden">
+             <h2 class="text-3xl md:text-4xl font-bold mb-4 text-center">Marktanalyse & Geschäftsmodell</h2>
+            <p class="max-w-3xl mx-auto text-stone-600 mb-12 text-center">Die OXID-Strategie basiert auf einem tiefen Verständnis des Mittelstands. Unser Produkt, die OXID Plattform, und unser Partnermodell sind die Antwort auf die spezifischen Herausforderungen dieses Marktes.</p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-left mb-16">
+                <div class="bg-white p-6 rounded-lg shadow-md"><h3 class="text-xl font-semibold mb-3 text-emerald-700">Zielmarkt: Der Mittelstand</h3><p class="text-stone-600">Komplexe Prozesse, aber begrenzte Ressourcen für teure Individualentwicklungen.</p></div>
+                <div class="bg-white p-6 rounded-lg shadow-md"><h3 class="text-xl font-semibold mb-3 text-emerald-700">Produkt: Die OXID Plattform</h3><p class="text-stone-600">Ein flexibles, erweiterbares Fundament für Partner zur effizienten Abbildung beliebiger Prozesse.</p></div>
+                <div class="bg-white p-6 rounded-lg shadow-md"><h3 class="text-xl font-semibold mb-3 text-emerald-700">Geschäftsmodell: Das Partnermodell</h3><p class="text-stone-600">Partner bringen Branchen- und Prozesskompetenz ein, um passgenaue Lösungen zu entwickeln.</p></div>
+            </div>
+             <div class="bg-white p-8 rounded-lg shadow-lg">
+                 <h3 class="text-2xl font-bold mb-6 text-center">Der Kern: Die Branchen-Partner-Prozess-Segment-Lösung</h3>
+                 <div class="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-2 flex-wrap">
                      <div class="p-4 bg-emerald-100 rounded-lg text-emerald-800 font-semibold">Prozess-Segment</div>
-                     <div class="text-2xl text-stone-400"> + </div>
+                     <div class="text-2xl text-stone-400 mx-2">+</div>
                      <div class="p-4 bg-emerald-100 rounded-lg text-emerald-800 font-semibold">Marktsegment (Branche)</div>
-                     <div class="text-2xl text-stone-400"> = </div>
-                     <div class="p-4 bg-emerald-600 text-white rounded-lg font-bold shadow-lg">Wiederverwendbare Partner-Lösung</div>
+                     <div class="text-2xl text-stone-400 mx-2">+</div>
+                     <div class="p-4 bg-emerald-100 rounded-lg text-emerald-800 font-semibold">Partner-Kompetenz</div>
+                     <div class="w-full md:w-auto flex justify-center items-center my-2 md:my-0"><div class="text-2xl text-stone-400 mx-2">=</div></div>
+                     <div class="p-4 bg-emerald-600 text-white rounded-lg font-bold shadow-lg text-center">Branchen-Partner-Prozess-Segment-Lösung</div>
                  </div>
-                 <p class="mt-6 text-stone-600 max-w-2xl mx-auto">Dieser Ansatz ermöglicht Fokussierung, Expertise, Skalierung und Effizienz – und damit exzellente, kostengünstige Lösungen für unsere Kunden.</p>
+                 <p class="mt-6 text-stone-600 max-w-3xl mx-auto text-center">Dieser Ansatz, bei dem ein Partner seine Kompetenz auf ein Markt- und Prozess-Segment fokussiert, ermöglicht exzellente, wiederverwendbare und kostengünstige Lösungen für unsere Kunden.</p>
             </div>
         </section>
 
-        <section id="mission" class="mb-20 md:mb-28 bg-white p-8 md:p-12 rounded-lg shadow-xl scroll-mt-20">
-            <h2 class="text-3xl md:text-4xl font-bold text-center mb-8">Unsere Mission</h2>
-            <p id="mission-statement" class="text-center text-2xl md:text-3xl font-light leading-relaxed text-stone-700 mb-8">
-                <span class="mission-segment" data-target="mission-1">Unsere Kunden spielen in der 1. Liga im digitalen Verkauf,</span>
-                <span class="mission-segment" data-target="mission-2">weil unsere Partner und wir gemeinsam</span>
-                <span class="mission-segment" data-target="mission-4">tolle eCommerce-Lösungen für den Mittelstand schaffen</span>
-                <span class="mission-segment" data-target="mission-3">auf Basis der OXID Plattform.</span>
-            </p>
-            <div id="mission-details" class="bg-stone-50 p-6 rounded-md min-h-[100px] transition-all duration-300">
-                <p class="text-stone-600 text-center">Klicken Sie auf einen Teil der Mission, um mehr über dessen Bedeutung zu erfahren.</p>
-            </div>
-        </section>
-
-        <section id="strategie" class="mb-20 md:mb-28 scroll-mt-20">
-            <h2 class="text-3xl md:text-4xl font-bold text-center mb-4">Die 4 Säulen der Strategie</h2>
-            <p class="max-w-3xl mx-auto text-stone-600 mb-12 text-center">Die Umsetzung der Mission erfolgt durch einen konsequenten Fokus auf eCommerce-Prozess-Segmente. Dies geschieht durch vier parallel laufende Aktivitäten, die unser Handeln bestimmen.</p>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                <div class="strategy-card bg-white p-6 rounded-lg shadow-md cursor-pointer" data-target="strategy-1">
-                    <h3 class="text-xl font-semibold mb-3 text-emerald-700">1. Verteidigen</h3>
-                    <p class="text-stone-600 mb-4">Segmente sichern, für die es bereits etablierte OXID-Lösungen gibt.</p>
-                    <div id="strategy-1" class="hidden mt-4 pt-4 border-t border-stone-200">
-                        <h4 class="font-semibold text-stone-800">Umsetzung:</h4>
-                        <ul class="list-disc list-inside text-stone-600 mt-2 space-y-1">
-                            <li>Partner gezielt weiterentwickeln.</li>
-                            <li>Plattform-Stabilität sichern.</li>
-                        </ul>
+        <!-- Strategische Modelle Section -->
+        <section id="modelle" class="content-section hidden">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12">Strategische Modelle</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                <div class="bg-white p-8 rounded-lg shadow-lg">
+                    <h3 class="text-2xl font-semibold mb-6 text-center">Levels of OXID Business Eco System</h3>
+                    <div id="eco-system-diagram" class="space-y-2">
+                        <div id="eco-kunde" class="eco-level border p-4 rounded-md bg-stone-100 text-center font-bold">Kunde</div>
+                        <div class="flex justify-center"><div class="h-6 w-px bg-stone-400"></div></div>
+                        <div id="eco-partner" class="eco-level border p-4 rounded-md bg-stone-100 text-center font-bold">Implementierungs-Partner</div>
+                        <div class="flex justify-center"><div class="h-6 w-px bg-stone-400"></div></div>
+                        <div id="eco-oxid" class="eco-level border p-4 rounded-md bg-red-600 text-center font-bold text-white">OXID</div>
+                        <div class="flex justify-center"><div class="h-6 w-px bg-stone-400"></div></div>
+                        <div class="grid grid-cols-4 gap-2">
+                            <div id="eco-ess1" class="eco-level border p-2 rounded-md bg-stone-100 text-center text-sm">eSS 1</div>
+                            <div id="eco-ess2" class="eco-level border p-2 rounded-md bg-stone-100 text-center text-sm">eSS 2</div>
+                            <div id="eco-ess3" class="eco-level border p-2 rounded-md bg-stone-100 text-center text-sm">eSS 3</div>
+                            <div id="eco-ess4" class="eco-level border p-2 rounded-md bg-stone-100 text-center text-sm">eSS n</div>
+                        </div>
                     </div>
+                    <div id="eco-details" class="mt-6 bg-stone-50 p-4 rounded-md min-h-[120px]"><p class="text-center text-stone-600">Klicken Sie auf eine Ebene, um die Kernkompetenzen anzuzeigen.</p></div>
                 </div>
-                <div class="strategy-card bg-white p-6 rounded-lg shadow-md cursor-pointer" data-target="strategy-2">
-                    <h3 class="text-xl font-semibold mb-3 text-emerald-700">2. Ausbauen</h3>
-                    <p class="text-stone-600 mb-4">Von OXID bereits belegte Segmente systematisch erweitern.</p>
-                    <div id="strategy-2" class="hidden mt-4 pt-4 border-t border-stone-200">
-                        <h4 class="font-semibold text-stone-800">Umsetzung:</h4>
-                        <ul class="list-disc list-inside text-stone-600 mt-2 space-y-1">
-                            <li>Partner mit qualifizierten Leads versorgen.</li>
-                            <li>Werkzeuge für den Lösungsbau optimieren.</li>
-                        </ul>
+                 <div class="bg-white p-8 rounded-lg shadow-lg">
+                    <h3 class="text-2xl font-semibold mb-6 text-center">Markt- & Produktfokus</h3>
+                    <div class="grid grid-cols-2 gap-8">
+                        <div>
+                            <h4 class="font-bold text-lg mb-2 text-center">Marktfokus</h4>
+                            <div class="w-40 h-40 mx-auto grid grid-cols-3 grid-rows-3 gap-1 p-1 bg-stone-200 rounded-md">
+                                <div class="bg-white rounded-sm"></div><div class="bg-red-500 rounded-sm"></div><div class="bg-white rounded-sm"></div>
+                                <div class="bg-yellow-400 rounded-sm"></div><div class="bg-blue-500 rounded-sm"></div><div class="bg-yellow-400 rounded-sm"></div>
+                                <div class="bg-gray-700 rounded-sm"></div><div class="bg-white rounded-sm"></div><div class="bg-gray-700 rounded-sm"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg mb-2 text-center">Produktfokus</h4>
+                            <div class="w-40 h-40 mx-auto grid grid-cols-3 grid-rows-3 gap-1 p-1 bg-stone-200 rounded-md">
+                                <div class="bg-white rounded-sm"></div><div class="bg-red-500 rounded-sm"></div><div class="bg-white rounded-sm"></div>
+                                <div class="bg-yellow-400 rounded-sm"></div><div class="bg-red-500 rounded-sm"></div><div class="bg-yellow-400 rounded-sm"></div>
+                                <div class="bg-gray-700 rounded-sm"></div><div class="bg-white rounded-sm"></div><div class="bg-gray-700 rounded-sm"></div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="strategy-card bg-white p-6 rounded-lg shadow-md cursor-pointer" data-target="strategy-3">
-                    <h3 class="text-xl font-semibold mb-3 text-emerald-700">3. Finden</h3>
-                    <p class="text-stone-600 mb-4">Kontinuierlich neue, vielversprechende Prozess-Segmente identifizieren.</p>
-                    <div id="strategy-3" class="hidden mt-4 pt-4 border-t border-stone-200">
-                        <h4 class="font-semibold text-stone-800">Umsetzung:</h4>
-                        <ul class="list-disc list-inside text-stone-600 mt-2 space-y-1">
-                            <li>Neue Partner mit passender Expertise gewinnen.</li>
-                            <li>Profitabelste Segmente für Roadmap priorisieren.</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="strategy-card bg-white p-6 rounded-lg shadow-md cursor-pointer" data-target="strategy-4">
-                    <h3 class="text-xl font-semibold mb-3 text-emerald-700">4. Besetzen</h3>
-                    <p class="text-stone-600 mb-4">Diese neuen Segmente gezielt mit Pionier-Partnern erobern.</p>
-                    <div id="strategy-4" class="hidden mt-4 pt-4 border-t border-stone-200">
-                        <h4 class="font-semibold text-stone-800">Umsetzung:</h4>
-                        <ul class="list-disc list-inside text-stone-600 mt-2 space-y-1">
-                            <li>Leuchtturm-Lösungen mit Partnern schaffen.</li>
-                            <li>Gezielte Go-to-Market-Kampagnen entwickeln.</li>
-                        </ul>
-                    </div>
+                    <div class="mt-6"><ul class="list-disc list-inside text-stone-700 mt-2 space-y-2"><li><span class="font-bold text-blue-600">Bestehende Felder verteidigen & ausbauen</span></li><li><span class="font-bold text-yellow-600">Neue Felder erobern</span></li><li><span class="font-bold text-red-600">Produktfokus:</span> Plattform & Module bereitstellen</li></ul></div>
                 </div>
             </div>
         </section>
 
-        <section id="ziele" class="scroll-mt-20">
-            <h2 class="text-3xl md:text-4xl font-bold text-center mb-4">Unternehmensziele 2025</h2>
-            <p class="max-w-3xl mx-auto text-stone-600 mb-12 text-center">Aus der Strategie leiten sich konkrete, messbare Unternehmensziele ab. Das Dashboard zeigt die wichtigsten Kennzahlen und ermöglicht eine detaillierte Betrachtung jedes einzelnen Ziels.</p>
+        <!-- Mission & Strategie Section -->
+        <section id="strategie" class="content-section hidden">
+            <div class="bg-white p-8 md:p-12 rounded-lg shadow-xl mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-center mb-8">Unsere Mission</h2>
+                <p id="mission-statement" class="text-center text-2xl md:text-3xl font-light leading-relaxed text-stone-700 mb-8">
+                    <span class="mission-segment" data-target="mission-1">Unsere Kunden spielen in der 1. Liga im digitalen Verkauf,</span>
+                    <span class="mission-segment" data-target="mission-2">weil unsere Partner und wir gemeinsam</span>
+                    <span class="mission-segment" data-target="mission-4">tolle eCommerce-Lösungen für den Mittelstand schaffen</span>
+                    <span class="mission-segment" data-target="mission-3">auf Basis der OXID Plattform.</span>
+                </p>
+                <div id="mission-details" class="bg-stone-50 p-6 rounded-md min-h-[100px] transition-all duration-300"><p class="text-stone-600 text-center">Klicken Sie auf einen Teil der Mission, um mehr zu erfahren.</p></div>
+            </div>
             
-            <div class="bg-white p-6 md:p-8 rounded-lg shadow-xl mb-12">
-                <h3 class="text-xl font-semibold mb-4 text-center">Wachstums- und Stabilitätsziele im Überblick</h3>
-                <div class="chart-container">
-                    <canvas id="zieleChart"></canvas>
-                </div>
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-4 mt-16">Die 4 Säulen der Strategie</h2>
+            <p class="max-w-3xl mx-auto text-stone-600 mb-12 text-center">Die Umsetzung der Mission erfolgt durch einen konsequenten Fokus auf eCommerce-Prozess-Segmente. Dies geschieht durch vier parallel laufende Aktivitäten.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                 <div class="strategy-card bg-white p-6 rounded-lg shadow-md cursor-pointer" data-target="strategy-1"><h3 class="text-xl font-semibold mb-3 text-emerald-700">1. Verteidigen</h3><p class="text-stone-600 mb-4">Etablierte Segmente und Lösungen sichern.</p><div id="strategy-1" class="hidden mt-4 pt-4 border-t"><ul class="list-disc list-inside text-sm text-stone-600 space-y-1"><li>Partner weiterentwickeln</li><li>Plattform-Stabilität sichern</li></ul></div></div>
+                <div class="strategy-card bg-white p-6 rounded-lg shadow-md cursor-pointer" data-target="strategy-2"><h3 class="text-xl font-semibold mb-3 text-emerald-700">2. Ausbauen</h3><p class="text-stone-600 mb-4">Bestehende Segmente systematisch erweitern.</p><div id="strategy-2" class="hidden mt-4 pt-4 border-t"><ul class="list-disc list-inside text-sm text-stone-600 space-y-1"><li>Partner mit Leads versorgen</li><li>Werkzeuge optimieren</li></ul></div></div>
+                <div class="strategy-card bg-white p-6 rounded-lg shadow-md cursor-pointer" data-target="strategy-3"><h3 class="text-xl font-semibold mb-3 text-emerald-700">3. Finden</h3><p class="text-stone-600 mb-4">Neue, vielversprechende Segmente identifizieren.</p><div id="strategy-3" class="hidden mt-4 pt-4 border-t"><ul class="list-disc list-inside text-sm text-stone-600 space-y-1"><li>Neue Partner gewinnen</li><li>Roadmap priorisieren</li></ul></div></div>
+                <div class="strategy-card bg-white p-6 rounded-lg shadow-md cursor-pointer" data-target="strategy-4"><h3 class="text-xl font-semibold mb-3 text-emerald-700">4. Besetzen</h3><p class="text-stone-600 mb-4">Neue Segmente gezielt erobern.</p><div id="strategy-4" class="hidden mt-4 pt-4 border-t"><ul class="list-disc list-inside text-sm text-stone-600 space-y-1"><li>Leuchttürme schaffen</li><li>Go-to-Market-Kampagnen</li></ul></div></div>
             </div>
+        </section>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            </div>
+        <!-- Ziele 2025 Section -->
+        <section id="ziele" class="content-section hidden">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-4">Unternehmensziele 2025</h2>
+            <p class="max-w-3xl mx-auto text-stone-600 mb-12 text-center">Aus der Strategie leiten sich 8 konkrete, messbare Unternehmensziele ab. Klicken Sie auf eine Karte, um die detaillierte Erläuterung und den Beitrag zur Mission zu sehen.</p>
+            <div id="kpi-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
         </section>
     </main>
-
-    <footer class="bg-stone-800 text-stone-300 mt-20">
-        <div class="container mx-auto px-6 py-4 text-center">
-            <p>&copy; 2025 OXID eSales AG | Interaktives Strategie-Dashboard</p>
-        </div>
-    </footer>
+    
+    <footer class="bg-stone-800 text-stone-300 mt-12"><div class="container mx-auto px-6 py-4 text-center text-sm"><p>&copy; 2025 OXID eSales AG | Interaktives Strategie Dashboard</p></div></footer>
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+    const mainNav = document.getElementById('main-nav');
+    const contentSections = document.querySelectorAll('.content-section');
+
+    mainNav.addEventListener('click', (e) => {
+        if (e.target.matches('.nav-link')) {
+            const targetId = e.target.dataset.target;
+
+            contentSections.forEach(section => {
+                section.classList.toggle('hidden', section.id !== targetId);
+            });
+            
+            mainNav.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.toggle('active', link.dataset.target === targetId);
+            });
+        }
+    });
+
     const missionSegments = {
-        'mission-1': '<strong>Das Kundenversprechen:</strong> Dies ist der ultimative Zweck und Nutzen, den OXID seinen Kunden bietet. Es geht nicht nur um Software, sondern um die Befähigung der Kunden, in ihrem Markt erfolgreich und führend zu sein.',
-        'mission-2': '<strong>Das Geschäftsmodell: Ein Partner-Ökosystem:</strong> Der Erfolg wird im Verbund mit einem Ökosystem aus spezialisierten Partnern erreicht. OXID agiert als Orchestrator, die Partner bringen ihre spezifische Kompetenz ein.',
-        'mission-3': '<strong>Das Produkt: Eine flexible Plattform:</strong> Dies benennt das technologische Fundament. Die Plattform ist so flexibel und erweiterbar konzipiert, dass Partner beliebige Verkaufsprozesse abbilden können.',
-        'mission-4': '<strong>Die strategische Lösung:</strong> Es werden keine generischen Shops geschaffen, sondern wiederverwendbare "Branchen-Prozess-Segment-Lösungen", die komplexe Anforderungen hocheffizient und kostengünstig abbilden.'
+        'mission-1': '<strong>Das Kundenversprechen:</strong> Der ultimative Nutzen für unsere Kunden - Befähigung, in ihrem Markt erfolgreich und führend zu sein.',
+        'mission-2': '<strong>Das Geschäftsmodell: Ein Partner-Ökosystem:</strong> Erfolg im Verbund mit spezialisierten Partnern. OXID als Orchestrator.',
+        'mission-3': '<strong>Das Produkt: Eine flexible Plattform:</strong> Das technologische Fundament, das Partnern die Abbildung beliebig komplexer Prozesse ermöglicht.',
+        'mission-4': '<strong>Die strategische Lösung:</strong> Schaffung wiederverwendbarer "Branchen-Partner-Prozess-Segment-Lösungen", die komplexe Anforderungen hocheffizient abbilden.'
     };
-
     const missionStatement = document.getElementById('mission-statement');
-    const missionDetails = document.getElementById('mission-details');
-
     missionStatement.addEventListener('click', (e) => {
         if (e.target.classList.contains('mission-segment')) {
             const targetId = e.target.dataset.target;
-
             document.querySelectorAll('.mission-segment').forEach(el => el.classList.remove('active'));
             e.target.classList.add('active');
-
-            missionDetails.innerHTML = `<p class="text-stone-700">${missionSegments[targetId]}</p>`;
+            document.getElementById('mission-details').innerHTML = `<p class="text-stone-700">${missionSegments[targetId]}</p>`;
         }
     });
 
     const strategyCards = document.querySelectorAll('.strategy-card');
     strategyCards.forEach(card => {
         card.addEventListener('click', () => {
-            const targetId = card.dataset.target;
-            const detailElement = document.getElementById(targetId);
-            const isVisible = !detailElement.classList.contains('hidden');
-            
-            detailElement.classList.toggle('hidden');
-            card.classList.toggle('shadow-xl', !isVisible);
-            card.classList.toggle('shadow-md', isVisible);
+            document.getElementById(card.dataset.target).classList.toggle('hidden');
+            card.classList.toggle('shadow-xl');
         });
     });
 
     const goalsData = [
-        {
-            id: 1,
-            title: "Bestandskundenbasis erhalten",
-            target: "< 11",
-            unit: "EE-Kundenverluste",
-            beitrag: "Sichert das wirtschaftliche Fundament des Unternehmens und bindet Partner an OXID."
-        },
-        {
-            id: 2,
-            title: "Neukunden gewinnen",
-            target: "> 53",
-            unit: "neue EE-Kunden",
-            beitrag: "Motor für Wachstum und Kompensation von Abwanderung. Wir gewinnen durch hochspezialisierte Prozess-Segment-Lösungen."
-        },
-        {
-            id: 3,
-            title: "Marktrelevante Partnerlösungen",
-            target: "von 1 auf ≥ 3",
-            unit: "skalierbare Lösungen",
-            beitrag: "Direkte Umsetzung der Mission und Aufbau wiederverwendbarer Assets, die das Geschäftsmodell stärken."
-        },
-        {
-            id: 4,
-            title: "Neue Implementierungspartner",
-            target: "3 bis 6",
-            unit: "neue Partner",
-            beitrag: "Skalierung der Mission durch erhöhte Marktreichweite und Resilienz des Ökosystems."
-        },
-        {
-            id: 5,
-            title: "Qualitative Releases",
-            target: "Kontinuierlich",
-            unit: "stabile & moderne Plattform",
-            beitrag: "Sicherung des technologischen Fundaments der Mission, das unsere Partner befähigt."
-        },
-        {
-            id: 6,
-            title: "OXID Lösungskompetenz",
-            target: "Aktiv",
-            unit: "Partner befähigen",
-            beitrag: "Steuerung des Partner-Ökosystems durch Werkzeuge, Leads und Know-how zur Umsetzung der Mission."
-        },
-        {
-            id: 7,
-            title: "Neue eSS-Partner gewinnen",
-            target: "6",
-            unit: "neue eSS-Partnerschaften",
-            beitrag: "Stärkung des Ökosystems mit wiederverwendbaren Diensten (z.B. Payment, Logistik)."
-        },
-        {
-            id: 8,
-            title: "Bestehende eSS-Partner aktivieren",
-            target: "Intensivieren",
-            unit: "der Zusammenarbeit",
-            beitrag: "Maximierung des Werts bestehender Partnerschaften für Effizienz und Profitabilität."
-        }
+        { id: 1, title: "Bestandskundenbasis erhalten", target: "< 11", unit: "EE-Kundenverluste", beitrag: 'Die Mission ist das zentrale Instrument, um Bestandskunden zu binden. Wir überführen sie gemeinsam mit Partnern aktiv in die neue Welt der "eCommerce Prozess Segment Lösungen" und befähigen sie so, auch in Zukunft "in der ersten Liga zu spielen".' },
+        { id: 2, title: "Neukunden gewinnen", target: "> 53", unit: "neue EE-Kunden", beitrag: 'Wir gewinnen Neukunden, weil wir ihnen hochspezialisierte "eCommerce Prozess Segment Lösungen" anbieten, mit denen sie ihre individuellen Herausforderungen meistern und "in der ersten Liga spielen" können.' },
+        { id: 3, title: "Marktrelevante Partnerlösungen", target: "von 1 auf ≥ 3", unit: "skalierbare Lösungen", beitrag: 'Dieses Ziel ist die direkte, messbare Operationalisierung der Mission. Der Aufbau dieser "tollen eCommerce-Lösungen" durch unsere Partner ist der konkrete Schritt, um die Mission in die Realität umzusetzen.' },
+        { id: 4, title: "Neue Implementierungspartner", target: "3 bis 6", unit: "neue Partner", beitrag: 'Ein wachsendes Netzwerk an kompetenten Partnern, die unsere Vision verstehen und umsetzen, sichert unsere Marktreichweite und ist die treibende Kraft hinter der Skalierung der Mission.' },
+        { id: 5, title: "Qualitative Releases", target: "Kontinuierlich", unit: "stabile Plattform", beitrag: 'Dieses Ziel operationalisiert das Fundament der Mission – die "Basis der OXID Plattform". Eine moderne Plattform ist die Voraussetzung, damit Partner "tolle eCommerce-Lösungen" entwickeln können.' },
+        { id: 6, title: "OXID Lösungskompetenz", target: "Aktiv", unit: "Partner befähigen", beitrag: 'Dieses Ziel operationalisiert den aktiven Part von OXID ("wir") in der Mission. Wir agieren als "Enabler" und schaffen die strategische Grundlage für den Erfolg unserer Partner.' },
+        { id: 7, title: "Neue eSS-Partner gewinnen", target: "6", unit: "neue eSS-Partnerschaften", beitrag: 'Neue eSS-Partner (z.B. für Payment) stärken das Ökosystem. Sie bringen Innovationen, die es unseren Partnern ermöglichen, noch "tollere eCommerce-Lösungen" zu bauen.' },
+        { id: 8, title: "Bestehende eSS-Partner aktivieren", target: "Intensivieren", unit: "der Zusammenarbeit", beitrag: 'Die Aktivierung stellt sicher, dass die Bausteine der "tollen eCommerce-Lösungen" von höchster Qualität sind und reibungslos funktionieren. Das maximiert den Wert bestehender Beziehungen.' }
     ];
-
-    const kpiGrid = document.querySelector('#ziele .grid');
+    const kpiGrid = document.getElementById('kpi-grid');
     goalsData.forEach(goal => {
         const card = document.createElement('div');
         card.className = 'kpi-card bg-white p-6 rounded-lg shadow-md cursor-pointer';
-        card.innerHTML = `
-            <h3 class="font-semibold text-stone-800">${goal.title}</h3>
-            <p class="text-3xl font-bold text-emerald-600 my-2">${goal.target}</p>
-            <p class="text-sm text-stone-500 mb-4">${goal.unit}</p>
-            <div class="goal-details hidden mt-4 pt-4 border-t border-stone-200">
-                <h4 class="font-semibold text-sm text-stone-800">Beitrag zur Mission:</h4>
-                <p class="text-stone-600 text-sm">${goal.beitrag}</p>
-            </div>
-        `;
+        card.innerHTML = `<h3 class="font-semibold text-stone-800">${goal.title}</h3><p class="text-3xl font-bold text-emerald-600 my-2">${goal.target}</p><p class="text-sm text-stone-500 mb-4">${goal.unit}</p><div class="goal-details hidden mt-4 pt-4 border-t border-stone-200"><h4 class="font-semibold text-sm text-stone-800">Einzahlung der Mission auf das Ziel:</h4><p class="text-stone-600 text-sm mt-1">${goal.beitrag}</p></div>`;
         kpiGrid.appendChild(card);
-    });
-    
-    kpiGrid.addEventListener('click', (e) => {
-        const card = e.target.closest('.kpi-card');
-        if (card) {
-            const details = card.querySelector('.goal-details');
-            const isVisible = !details.classList.contains('hidden');
-            details.classList.toggle('hidden');
-            card.classList.toggle('shadow-xl', !isVisible);
-            card.classList.toggle('shadow-md', isVisible);
-        }
+        card.addEventListener('click', () => {
+            card.querySelector('.goal-details').classList.toggle('hidden');
+            card.classList.toggle('shadow-xl');
+        });
     });
 
-    const ctx = document.getElementById('zieleChart').getContext('2d');
-    new Chart(ctx, {
+    const chartConfig = {
         type: 'bar',
         data: {
             labels: ['Neue EE-Kunden', 'Neue Partnerlösungen', 'Neue Impl.-Partner', 'Neue eSS-Partner', 'Verlust EE-Kunden'],
             datasets: [{
                 label: 'Zielwert 2025',
                 data: [53, 3, 6, 6, -11],
-                backgroundColor: [
-                    'rgba(16, 185, 129, 0.7)',
-                    'rgba(5, 150, 105, 0.7)',
-                    'rgba(6, 95, 70, 0.7)',
-                    'rgba(4, 120, 87, 0.7)',
-                    'rgba(220, 38, 38, 0.7)'
-                ],
-                borderColor: [
-                    'rgb(16, 185, 129)',
-                    'rgb(5, 150, 105)',
-                    'rgb(6, 95, 70)',
-                    'rgb(4, 120, 87)',
-                    'rgb(220, 38, 38)'
-                ],
+                backgroundColor: ['rgba(16, 185, 129, 0.7)','rgba(5, 150, 105, 0.7)','rgba(6, 95, 70, 0.7)','rgba(4, 120, 87, 0.7)','rgba(220, 38, 38, 0.7)'],
+                borderColor: ['rgb(16, 185, 129)','rgb(5, 150, 105)','rgb(6, 95, 70)','rgb(4, 120, 87)','rgb(220, 38, 38)'],
                 borderWidth: 1
             }]
         },
         options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    display: false
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            let label = context.dataset.label || '';
-                            if (label) {
-                                label += ': ';
-                            }
-                            if (context.parsed.y !== null) {
-                                label += context.parsed.y;
-                                if(context.label === 'Verlust EE-Kunden') {
-                                    label = `Maximaler Verlust: ${Math.abs(context.parsed.y)}`;
-                                } else {
-                                    label = `Mindestziel: ${context.parsed.y}`;
-                                }
-                            }
-                            return label;
-                        }
-                    }
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    title: {
-                        display: true,
-                        text: 'Anzahl'
-                    }
-                }
-            }
+            responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { display: false }, tooltip: { callbacks: { label: (c) => (c.label === 'Verlust EE-Kunden') ? `Maximaler Verlust: ${Math.abs(c.parsed.y)}` : `Mindestziel: ${c.parsed.y}` } } },
+            scales: { y: { beginAtZero: true, title: { display: true, text: 'Anzahl' } } }
+        }
+    };
+    new Chart(document.getElementById('zieleChartOverview').getContext('2d'), chartConfig);
+    
+    const ecoSystem = {
+        kunde: "<strong>Business Competency:</strong> Definiert Geschäftsanforderungen und -prozesse.",
+        partner: "<strong>Business Process Competency:</strong> Kompetenz zur Implementierung von Geschäftsprozessen auf OXID-Technologie und anderen relevanten Systemen (ERP, PIM, ...).",
+        oxid: "<strong>Competency in developing this technology:</strong> Kernkompetenz in der Entwicklung der Plattform-Technologie und im Aufbau des Partnernetzwerks.",
+        ess: "<strong>Competency in management of specific processes:</strong> Kompetenz im Management spezifischer Prozesse, oft am Ende der Shop-Transaktion (z.B. Payment, Logistik)."
+    };
+    document.getElementById('eco-system-diagram').addEventListener('click', (e) => {
+        const level = e.target.closest('.eco-level');
+        if (level) {
+            const levelId = level.id.replace('eco-', '');
+            const detailKey = (levelId.startsWith('ess')) ? 'ess' : levelId;
+            document.querySelectorAll('.eco-level').forEach(el => el.classList.remove('highlight'));
+            level.classList.add('highlight');
+            document.getElementById('eco-details').innerHTML = `<p class="text-stone-700 text-sm">${ecoSystem[detailKey]}</p>`;
         }
     });
-
 });
 </script>
 </body>
